@@ -2,6 +2,7 @@ package edu.umd.cs.sodorfriends2;
 
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.CardView;
@@ -34,15 +35,32 @@ public class TrainListActivity extends AppCompatActivity {
         toolbar.setTitle(getTitle());
 
         mDatabase = new SodorDB(getApplicationContext());
-        mTrains = mDatabase.getTrains();
-        RecyclerView list = (RecyclerView) findViewById(R.id.trains_list);
-        list.setAdapter(new TrainRecyclerViewAdapter());
+        (new DownloadFromDB()).execute(mDatabase);
+        // i don't have the data yet!!
+
 
     }
 
     public ArrayList<Train> getTrains() {
         return mTrains;
     }
+
+
+
+    private class DownloadFromDB extends AsyncTask<SodorDB, Void, ArrayList<Train>> {
+
+        @Override
+        protected ArrayList<Train> doInBackground(SodorDB... params) {
+            SodorDB db = params[0];
+            return(db.getTrains());
+        }
+        protected void onPostExecute(ArrayList<Train> trains) {
+            mTrains = trains;
+            RecyclerView list = (RecyclerView) findViewById(R.id.trains_list);
+            list.setAdapter(new TrainRecyclerViewAdapter());
+        }
+    }
+
 
     public class TrainRecyclerViewAdapter
             extends RecyclerView.Adapter<TrainRecyclerViewAdapter.ViewHolder> {
@@ -69,7 +87,10 @@ public class TrainListActivity extends AppCompatActivity {
 
         @Override
         public int getItemCount() {
-            return mTrains.size();
+            if (mTrains != null) {
+                return mTrains.size();
+            }
+            return 0;
         }
 
 

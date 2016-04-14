@@ -106,6 +106,7 @@ public class SodorDB {
         }
 
         public ArrayList<Train> getTrains() {
+
             Log.d("SODORDB", "in getTrains()");
             openReadableDB();
             String[] projection = { COL_ID, COL_NAME, COL_IMAGE };
