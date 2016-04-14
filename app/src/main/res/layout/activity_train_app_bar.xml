@@ -17,7 +17,8 @@
     </android.support.design.widget.AppBarLayout>
 
     <FrameLayout android:layout_width="match_parent" android:layout_height="match_parent"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" android:id="@+id/frameLayout">
+        app:layout_behavior = "@string/appbar_scrolling_view_behavior"
+        android:id="@+id/frameLayout">
 
         <include layout="@layout/list_view" />
     </FrameLayout>

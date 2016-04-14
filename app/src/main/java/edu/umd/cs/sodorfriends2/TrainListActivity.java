@@ -35,14 +35,15 @@ public class TrainListActivity extends AppCompatActivity {
 
         mDatabase = new SodorDB(getApplicationContext());
         mTrains = mDatabase.getTrains();
-        RecyclerView list = findViewById(R.id.trains_list);
-        list.setAdapter(new SimpleItemRecyclerViewAdapter(new ContinentNameList()));
-        //setListAdapter(new TrainArrayAdapter(getContext(), activity.getTrains()));
+        RecyclerView list = (RecyclerView) findViewById(R.id.trains_list);
+        list.setAdapter(new TrainRecyclerViewAdapter());
+
     }
 
     public ArrayList<Train> getTrains() {
         return mTrains;
     }
+
     public class TrainRecyclerViewAdapter
             extends RecyclerView.Adapter<TrainRecyclerViewAdapter.ViewHolder> {
 
@@ -60,18 +61,20 @@ public class TrainListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             final Train train = mTrains.get(position);
-            holder.getNameView().setText(mValues.get(position).getName());
+
+            holder.getImageView().setImageBitmap(train.getBitmap());
+            holder.getNameView().setText(train.getName());
+            holder.getNumView().setText(train.getNum());
         }
 
         @Override
         public int getItemCount() {
             return mTrains.size();
         }
-    }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
 
-            private final CardView mCardView;
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
             private final ImageView mImage;
             private final TextView mName;
             private final TextView mNumber;
@@ -79,18 +82,23 @@ public class TrainListActivity extends AppCompatActivity {
 
             public ViewHolder(View itemView) {
                 super(itemView);
-                mCardView = (CardView) itemView.findViewById(R.id.card_view);
+
                 mImage = (ImageView) itemView.findViewById(R.id.train_image);
                 mName = (TextView) itemView.findViewById(R.id.train_name);
-                mNumber = (TextView) itemView.findViewById(R.id.train_image);
+                mNumber = (TextView) itemView.findViewById(R.id.train_num);
             }
 
             @Override
             public String toString() {
                 String toreturn = super.toString() + " '" + mName.getText() + "'";
                 return toreturn;
-                }
             }
+
+            public ImageView getImageView() { return  mImage;}
+            public TextView getNameView() { return mName; }
+            public TextView getNumView() { return mNumber; }
+
+        }
 
     }
 }
